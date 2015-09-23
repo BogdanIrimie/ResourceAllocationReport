@@ -26,73 +26,24 @@ Monitoring plays an important role in todays offerings of computing computing be
 Resources in the cloud can be provisioned and released with ease in a short period of time and monitoring systems should be able to scale just as fast in order to adapt to the new monitoring requirements. In order to adapt, the monitoring systems
 should relay on a resource allocation mechanism that can take into account the architectures of the monitoring systems and provide strategies for resource allocation. The architecture of the monitoring systems is very important because it dictates the means of obtaining scalability, some systems having architectures that allow scaling with ease by providing decoupled systems where each component can be scaled independently,while other systems are build on a monolithic architecture making scaling more challenging and in some cases even impossible.
 
-In this report we will focus on a monitoring system that implements a pipe and filter architecture allowing independent scaling of all components, and thus providing fault tolerance and parallel execution of jobs.
+In this report we will focus on a monitoring system that implements a pipe and filter architecture allowing independent scaling of all components, and thus providing fault tolerance and parallel execution of jobs. 
 
-\section*{Results}
+\section{Analyzing the system and it's architecture}
 
-Up to three levels of \textbf{subheading} are permitted. Subheadings should not be numbered.
-
-\subsection*{Subsection}
-
-Example text under a subsection. Bulleted lists may be used where appropriate, e.g.
-
-\begin{itemize}
-\item First item
-\item Second item
-\end{itemize}
-
-\subsubsection*{Third-level section}
- 
-Topical subheadings are allowed.
-
-\section*{Discussion}
-
-The Discussion should be succinct and must not contain subheadings.
-
-\section*{Methods}
-
-Topical subheadings are allowed. Authors must ensure that their Methods section includes adequate experimental and characterization data necessary for others in the field to reproduce their work.
-
-\bibliography{./bib/sample}
-
-\noindent LaTeX formats citations and references automatically using the bibliography records in your .bib file, which you can edit via the project menu. Use the cite command for an inline citation, e.g.  \cite{Figueredo:2009dg}.
-
-\section*{Acknowledgements (not compulsory)}
-
-Acknowledgements should be brief, and should not include thanks to anonymous referees and editors, or effusive comments. Grant or contribution numbers may be acknowledged.
-
-\section*{Author contributions statement}
-
-Must include all authors, identified by initials, for example:
-A.A. conceived the experiment(s),  A.A. and B.A. conducted the experiment(s), C.A. and D.A. analysed the results.  All authors reviewed the manuscript. 
-
-\section*{Additional information}
-
-To include, in this order: \textbf{Accession codes} (where applicable); \textbf{Competing financial interests} (mandatory statement). 
-
-The corresponding author is responsible for submitting a \href{http://www.nature.com/srep/policies/index.html#competing}{competing financial interests statement} on behalf of all authors of the paper. This statement must be included in the submitted article file.
+The architecture Fig. \ref{fig:systemArchitecture} of the system is pr
 
 \begin{figure}[ht]
 \centering
-\includegraphics[width=\linewidth]{./img/stream}
-\caption{Legend (350 words max). Example legend text.}
-\label{fig:stream}
+\includegraphics[width=\linewidth]{./img/MonitoringSystemArchitecture Remediation.png}
+\caption{Distributed monitoring system architecture}
+\label{fig:systemArchitecture}
 \end{figure}
 
-\begin{table}[ht]
-\centering
-\begin{tabular}{|l|l|l|}
-\hline
-Condition & n & p \\
-\hline
-A & 5 & 0.1 \\
-\hline
-B & 10 & 0.01 \\
-\hline
-\end{tabular}
-\caption{\label{tab:example}Legend (350 words max). Example legend text.}
-\end{table}
 
-Figures and tables can be referenced in LaTeX using the ref command, e.g. Figure \ref{fig:stream} and Table \ref{tab:example}.
+
+\bibliography{./bib/sample}
+
+\section*{Acknowledgements}
+
 
 \end{document}
