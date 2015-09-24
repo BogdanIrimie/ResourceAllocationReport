@@ -30,7 +30,19 @@ In this report we will focus on a monitoring system that implements a pipe and f
 
 \section{Analyzing the system and it's architecture}
 
-The architecture Fig. \ref{fig:systemArchitecture} of the system is pr
+The architecture presented Fig. \ref{fig:systemArchitecture} of the system is an extension of [cite paper from SYNASC]. The system is composed of 7 components: FrontEnd, Scanner, Converter, Presenter, Remediator, a document database and a message queue. The first five components send messages using the queue and are completely decoupled from one another, from each component perspective the system is only compose of itself and one or more message queues. This decoupling provides grate opportunity for replication and scalability.
+
+\section{The problem}
+Although the system is very flexible and allows replication of components, it does not contain any component that is able to evaluate it's state and make decisions regarding allocation and release of resources consequently scaling must be done manually. Manual scaling the system can become a complex problem because each component has different resource requirements and even the same component can use more or less of a resource, depending on the job that it must execute. Monitoring the system manually and scaling it quickly become unmanageable and an automated way to do the scaling is desirable. 
+
+In order to scale the system automatically, key performance metrics must be gathered and analyzed. 
+
+\section{Gathering performance metrics}
+Some of the basic performance parameters that can be gathered for a component are CPU, memory and network usage. Knowing the resource utilization of one component allows us to take decisions regarding deployment of that component. For example we can have 2 component, one with high CPU usage and one with high network usage, it would be wise to combine replicas of those components on the same VM or to allocate the ones that require high CPU usage to VM's with powerful CPU. By having this insight on component resource utilization we are able to take those decisions and to use the resources that we have in an efficient way. But resource utilization for components can vary with time, so a static scheme is not very useful, because it becomes outdated in a short period of time. Conterminous monitoring the components and taking actions on fresh performance metrics is crucial in guaranteeing optimal allocation strategies.
+
+\subsection{Monitoring CPU}
+ 
+
 
 \begin{figure}[ht]
 \centering
