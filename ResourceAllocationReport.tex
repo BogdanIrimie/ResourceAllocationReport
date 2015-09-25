@@ -20,70 +20,11 @@
 
 \input{./tex/introduction}
 
-\section{Analyzing the system and it's architecture}
-The architecture of the system is important because it dictates the means by which scalability can be obtained. In figure Fig. \ref{fig:systemArchitecture} the architecture of the system is presented, this architecture being an extension of [cite paper from SYNASC]. The system is composed of 7 components: FrontEnd, Scanner, Converter, Presenter, Remediator, a document database and a message queue. The first five components send messages using the queue and are completely decoupled from one another, from each component perspective the system is only compose of itself and one or more message queues. This decoupling provides grate opportunity for replication and scalability.
+\input{./tex/analyzeSystemArchitecture}
 
-\begin{figure}[ht]
-\centering
-\includegraphics[width=\linewidth]{./img/MonitoringSystemArchitectureRemediation.png}
-\caption{Distributed monitoring system architecture}
-\label{fig:systemArchitecture}
-\end{figure}
+\input{./tex/resourceAllocation}
 
-\section{Resource allocation for a system following a pipe and filter like architecture}
-This section focuses on the main challenges of implementing resource allocation without losing fault tolerance or decoupling between components. Replicas of the same component have no means of organizing, they just take the next job that is available in the queue and execute it, no mechanism for distributing the jobs is in place. Replicas of the same component can consume different amounts of system resources, depending on the type of job they are executing, bat because they have no possibility to select the jobs they will execute, they just take the next job from the queue, we cannot predict on which of the replicas the job will be executed. Because of this unpredictability, the task of allocating resources becomes challenging and different methods have been proposed.
-
-\subsection{Method 1: Allows the system to balance work in a natural way and not intervene in job allocation}
-Fig. \ref{fig:randomDIstributionsOfTasks}
-
-\begin{figure}[ht]
-\centering
-\includegraphics[width=\linewidth]{./img/1_NaturalLoadBalancing.png}
-\caption{Random distribution of tasks}
-\label{fig:randomDIstributionsOfTasks}
-\end{figure}
-
-\subsection{Method 2: Assign sizes to jobs and constrain component replicas to execute some type of jobs with a higher priority than others}
-
-\subsection{Method 3: Create multiple queues deepening on the size of the jobs}
-
-\subsection{Method 4: Use other types of data structure to send the jobs from one component to another}
-
-\section{The problem}
-Although the system is very flexible and allows replication of components, it does not contain any component that is able to evaluate it's state and make decisions regarding allocation and release of resources consequently scaling must be done manually. Manual scaling the system can become a complex problem because each component has different resource requirements and even the same component can use more or less of a resource, depending on the job that it must execute. Monitoring the system manually and scaling it quickly become unmanageable and an automated way to do the scaling is desirable. 
-
-In order to scale the system automatically, key performance metrics must be gathered and analyzed. 
-
-\section{Gathering performance metrics}
-Some of the basic performance parameters that can be gathered for a component are CPU, memory and network usage. Knowing the resource utilization of one component allows us to take decisions regarding deployment of that component. For example we can have 2 component, one with high CPU usage and one with high network usage, it would be wise to combine replicas of those components on the same VM or to allocate the ones that require high CPU usage to VM's with powerful CPU. By having this insight on component resource utilization we are able to take those decisions and to use the resources that we have in an efficient way. But resource utilization for components can vary with time, so a static scheme is not very useful, because it becomes outdated in a short period of time. Conterminous monitoring the components and taking actions on fresh performance metrics is crucial in guaranteeing optimal allocation strategies.
-
-\subsection{Monitoring CPU}
-A first step would be to monitor the CPU usage in order to find a rough approximation of how much computing power does a component need. The main challenge here is to find tools that are able to monitor short lived processed (under 1 second) and to report with high accuracy the CPU usage because sometimes components can use very little CPU. Four tools / methods of gathering CPU usage statistics were reviewed:  
-\begin{itemize}
-	\item Using a class from the Java library called "ManagementFactory" is a good way to measure the Java program, the main drawback is that Nmap is an external program and it cannot be monitored by this library.
-	\item Sigar library for Java can be used to monitor arbitrary process id's (PIDs), but the problem is that we first have to start the component, obtain it's PID and only after we can start monitoring it with "Sigar" library, the main problem is that we might lose the CPU usage at the start of the process which can be introduce high error rates.
-	\item pidstat and top have the same drawbacks. they miss the CPu usage for the process if it is very short lived, they miss the CPU usage of the process right before it ends, but they are better alternatives than the tools mentioned before because they can monitor processes from the moment they are crated, not missing the CPU usage from the start of the process.
-	\item atop can monitor processes from the moment they are crated and capture the CPu usage of the process right before it terminated. Because it is able to capture the CPU usage at the start and at the end of the lifetime of a process, it provides very accurate results introducing small overhead on the system. The only drawback that was found is related to the root privileges that are needed in order to run this tool.
-\end{itemize}
- 
-The tool atop was chosen to measure CPU usage because of it's high accuracy and low overhead. In the first implementation "atop" was called at the begging of each new job for each component, but this approach had many drawbacks: because it took some time to start atop, some CPU usage might be lost, and it required launching atop for each job and for each component making it consume considerable system resources. The second approach was to use launch "atop" from an external script, parse it's results and store them in a log file. Each component that is interested in it's or others component CPU usage can just parse the log and search after the PID of interest between a time intervals. This second approach was much better because it allowed using only 1 atop instance to gather CPU usage statistics for all running processes on a system, and each component that was interested in it's CPU usage could have just parsed the log file. Another advantage was that it decoupled the monitoring activities from the components that were monitored. The architecture for the second approach is presented in Fig. \ref{fig:monitoringArchitecture}, the log document is read from the bottom upwards, because the chances are that the monitoring results will be closer to the bottom than to the top.
-
-\begin{figure}[ht]
-\centering
-\includegraphics[width=\linewidth]{./img/MonitoringCPUMechanism.png}
-\caption{Distributed monitoring system architecture}
-\label{fig:monitoringArchitecture}
-\end{figure}
-
-Fig. \ref{fig:monitoringArchitectureExtended}  presents an architecture that is even more decoupled than the one that was implemented, the parsing is done in a different component "Monitor" and the components only need to save the beginning and the end time for a job they executed, the parsing of the monitoring data would be done by the "Monitor" component. This architecture ads more flexibility, because the Monitor component can be on the same machine to minimize network traffic (otherwise the log would have to be transfered to the machine that holds the "Monitor" component) or on a different machine.
-
-
-\begin{figure}[ht]
-\centering
-\includegraphics[width=\linewidth]{./img/MonitoringCPUMechanismExtended.png}
-\caption{Distributed monitoring system architecture}
-\label{fig:monitoringArchitectureExtended}
-\end{figure}
+\input{./tex/performanceMetrics}
 
 
 
