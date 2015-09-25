@@ -1,37 +1,41 @@
-\documentclass[fleqn,10pt]{./class/wlscirep}
-\title{Analizing resource allocation for a distributed monitoring application}
+\documentclass[10pt,report,compsoc, onecolumn]{./class/IEEEtran}
+\hyphenation{op-tical net-works semi-conduc-tor}
+\usepackage{graphicx}
+\usepackage{multirow}
+\usepackage[hyphens]{url}	% allow URL breal
+\usepackage{hyperref}	% links from the reference to the source
+\usepackage{listings}	% for code snippets
+\usepackage{pgfplots} 	% graphics
+\usepackage{flushend}	% balance columns at the end of the paper
+\usepackage{caption}
+\usepackage{subcaption}
 
-\author[1,2,*]{Bogdan-Constantin Irimie}
-
-\affil[1]{Institute e-Austria Timisoara, Romania}
-\affil[2]{Department of Computer Science, West University of Timisoara, Romania}
-\affil[*]{bogdan.irimie90@e-uvt.ro}
-
-\keywords{Resource allocation, performance monitoring}
 
 
-\input{./tex/abstract}
+
+
 
 \begin{document}
+\title{Report: Analizing resource allocation for a distributed monitoring application}
 
-\flushbottom
+\author{\IEEEauthorblockN{
+Bogdan-Constantin Irimie\IEEEauthorrefmark{1}\IEEEauthorrefmark{2}}
+\IEEEauthorblockA{ 
+	\IEEEauthorrefmark{1}Institute e-Austria Timisoara, Romania\\
+	\IEEEauthorrefmark{2}Department of Computer Science, West University of Timisoara, Romania}
+}
+
+
 \maketitle
-\thispagestyle{empty}
 
+\input{./tex/abstract}
 \input{./tex/introduction}
-
 \input{./tex/analyzeSystemArchitecture}
-
 \input{./tex/resourceAllocation}
-
 \input{./tex/performanceMetrics}
-
 \input{./tex/acknowledgements}
 
-
-\bibliography{./bib/sample}
-
-
-
+\bibliographystyle{./class/IEEEtran}
+\bibliography{./bib/report.bib}
 
 \end{document}
