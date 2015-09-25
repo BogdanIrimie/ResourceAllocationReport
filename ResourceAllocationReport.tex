@@ -1,41 +1,40 @@
 \documentclass[fleqn,10pt]{./class/wlscirep}
 \title{Analizing resource allocation for a distributed monitoring application}
 
-\author[1,2,3,*]{Bogdan-Constantin Irimie}
+\author[1,2,*]{Bogdan-Constantin Irimie}
 
 \affil[1]{Institute e-Austria Timisoara, Romania}
 \affil[2]{Department of Computer Science, West University of Timisoara, Romania}
-\affil[3]{Department of Computing, Imperial College London, United Kingdon}
 \affil[*]{bogdan.irimie90@e-uvt.ro}
 
 \keywords{Resource allocation, performance monitoring}
 
-\begin{abstract}
-In a cloud environment monitoring applications should be able to scale in order to satisfy the monitoring requirements offering good quality of service and efficient resource utilization. In order for this scaling to be possible, monitoring applications should be built from the ground up with this goal in mind and mechanism for auto scaling should be implemented in order to provide a fast adaptation time. This report describes the work that has been done in order to enhance a monitoring system with automatic resource allocation capabilities. The work describes possible architectures with their advantages and drawbacks and implementations with their technical challenges.
-\end{abstract}
+
+\input{./tex/abstract}
+
 \begin{document}
 
 \flushbottom
 \maketitle
 \thispagestyle{empty}
 
-\section*{Introduction}
-
-Monitoring plays an important role in todays offerings of computing computing because it enables cloud providers and consumers to check if the quality of service they have agreed upon is satisfied, additionally monitoring can be used to verify that a certain level of security is enabled. 
-
-Resources in the cloud can be provisioned and released with ease in a short period of time and monitoring systems should be able to scale just as fast in order to adapt to the new monitoring requirements. In order to adapt, the monitoring systems
-should relay on a resource allocation mechanism that can take into account the architectures of the monitoring systems and provide strategies for resource allocation. The architecture of the monitoring systems is very important because it dictates the means of obtaining scalability, some systems having architectures that allow scaling with ease by providing decoupled systems where each component can be scaled independently,while other systems are build on a monolithic architecture making scaling more challenging and in some cases even impossible.
-
-In this report we will focus on a monitoring system that implements a pipe and filter architecture allowing independent scaling of all components, and thus providing fault tolerance and parallel execution of jobs. 
+\input{./tex/introduction}
 
 \section{Analyzing the system and it's architecture}
 The architecture of the system is important because it dictates the means by which scalability can be obtained. In figure Fig. \ref{fig:systemArchitecture} the architecture of the system is presented, this architecture being an extension of [cite paper from SYNASC]. The system is composed of 7 components: FrontEnd, Scanner, Converter, Presenter, Remediator, a document database and a message queue. The first five components send messages using the queue and are completely decoupled from one another, from each component perspective the system is only compose of itself and one or more message queues. This decoupling provides grate opportunity for replication and scalability.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\linewidth]{./img/MonitoringSystemArchitectureRemediation.png}
+\caption{Distributed monitoring system architecture}
+\label{fig:systemArchitecture}
+\end{figure}
 
 \section{Resource allocation for a system following a pipe and filter like architecture}
 This section focuses on the main challenges of implementing resource allocation without losing fault tolerance or decoupling between components. Replicas of the same component have no means of organizing, they just take the next job that is available in the queue and execute it, no mechanism for distributing the jobs is in place. Replicas of the same component can consume different amounts of system resources, depending on the type of job they are executing, bat because they have no possibility to select the jobs they will execute, they just take the next job from the queue, we cannot predict on which of the replicas the job will be executed. Because of this unpredictability, the task of allocating resources becomes challenging and different methods have been proposed.
 
 \subsection{Method 1: Allows the system to balance work in a natural way and not intervene in job allocation}
-\ref{fig:randomDIstributionsOfTasks}
+Fig. \ref{fig:randomDIstributionsOfTasks}
 
 \begin{figure}[ht]
 \centering
@@ -69,14 +68,15 @@ A first step would be to monitor the CPU usage in order to find a rough approxim
  
 The tool atop was chosen to measure CPU usage because of it's high accuracy and low overhead. In the first implementation "atop" was called at the begging of each new job for each component, but this approach had many drawbacks: because it took some time to start atop, some CPU usage might be lost, and it required launching atop for each job and for each component making it consume considerable system resources. The second approach was to use launch "atop" from an external script, parse it's results and store them in a log file. Each component that is interested in it's or others component CPU usage can just parse the log and search after the PID of interest between a time intervals. This second approach was much better because it allowed using only 1 atop instance to gather CPU usage statistics for all running processes on a system, and each component that was interested in it's CPU usage could have just parsed the log file. Another advantage was that it decoupled the monitoring activities from the components that were monitored. The architecture for the second approach is presented in Fig. \ref{fig:monitoringArchitecture}, the log document is read from the bottom upwards, because the chances are that the monitoring results will be closer to the bottom than to the top.
 
-Fig. \ref{fig:monitoringArchitectureExtended}  presents an architecture that is even more decoupled than the one that was implemented, the parsing is done in a different component "Monitor" and the components only need to save the beginning and the end time for a job they executed, the parsing of the monitoring data would be done by the "Monitor" component. This architecture ads more flexibility, because the Monitor component can be on the same machine to minimize network traffic (otherwise the log would have to be transfered to the machine that holds the "Monitor" component) or on a different machine.
-
 \begin{figure}[ht]
 \centering
 \includegraphics[width=\linewidth]{./img/MonitoringCPUMechanism.png}
 \caption{Distributed monitoring system architecture}
 \label{fig:monitoringArchitecture}
 \end{figure}
+
+Fig. \ref{fig:monitoringArchitectureExtended}  presents an architecture that is even more decoupled than the one that was implemented, the parsing is done in a different component "Monitor" and the components only need to save the beginning and the end time for a job they executed, the parsing of the monitoring data would be done by the "Monitor" component. This architecture ads more flexibility, because the Monitor component can be on the same machine to minimize network traffic (otherwise the log would have to be transfered to the machine that holds the "Monitor" component) or on a different machine.
+
 
 \begin{figure}[ht]
 \centering
@@ -86,12 +86,6 @@ Fig. \ref{fig:monitoringArchitectureExtended}  presents an architecture that is 
 \end{figure}
 
 
-\begin{figure}[ht]
-\centering
-\includegraphics[width=\linewidth]{./img/MonitoringSystemArchitectureRemediation.png}
-\caption{Distributed monitoring system architecture}
-\label{fig:systemArchitecture}
-\end{figure}
 
 
 \bibliography{./bib/sample}
