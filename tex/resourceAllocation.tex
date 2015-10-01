@@ -4,6 +4,7 @@ This section focuses on the main challenges of implementing resource allocation 
 Replicas for the "Scanner" component were used as a case study and the following strategies were considered. Jobs present in the queue were marked as H (high), M (medium), L (low) denoting the CPU usage necessary to complete a job. The following methods were proposed in order to extend the system, taking it one step closer to automatic allocation of resources (components).
 
 \subsection{Method 1: Allows the system to balance work in a natural way and not intervene in job allocation}
+\label{subsection:method1}
 The first strategy was to let the replicas of the "Scanner" component execute whatever job is available in the queue if they are idle. The main advantages of this strategy is that it does not require any changes to the system, so no extra complexity is added. Fig. \ref{fig:randomDistributionsOfTasks} presents the architecture of the first approach. Another advantage is that components are decoupled as envisioned in the initial architecture Fig. \ref{fig:systemArchitecture}.
 
 The main drawback of this approach is that, because balancing is done by chance, in the worst case, the system could be completely unbalanced, some component executing only high intensive CPU jobs while others executing only low CPU intensive jobs. If more than one "Scanner" replicas run on the same VM, than the chances are even lower for this to happen because, even if some component would be "unlucky" enough to only execute CPU intensive jobs, they would be balanced by other components that execute low intensive CPU jobs from the same machine.
@@ -54,6 +55,6 @@ Although this approach eliminates most of the disadvantages we had when using me
 \end{figure}
 
 \subsection{Choosing one method}
-One of the assumption made at the beginning of this section was that we can determine in advance the CPU usage for jobs, but this can prove to be very difficult in practice because there are more than 3 types of jobs and they CPU usage depends on other factors like network speed and the speed of response for a particular host, network configuration, etc.
+One of the assumption made at the beginning of this section was that we can determine in advance the CPU usage for jobs, but this can prove to be very difficult in practice because there are more than 3 types of jobs and their CPU usage depends on other factors like network speed and the speed of response for a particular host, network configuration, etc.
 
-As a starting point we chose method 1 (reference to subsection 1) because it does not break any of the properties the system has, it can be later extended to any of the more advanced methods and in practice we observed that "Scanner" replicas tend to balanced themselves naturally, without any intervention.
+As a starting point we chose the method presented in \ref{subsection:method2} because it does not break any of the properties of the system, it can be later extended to any of the more advanced methods and in practice we observed that "Scanner" replicas tend to balanced themselves naturally, without any intervention.
