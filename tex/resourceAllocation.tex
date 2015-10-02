@@ -28,7 +28,7 @@ The second approach Fig. \ref{fig:sizeBaseDistributionOftasks} proposes using so
 \end{figure}
 
 
-\subsection{Method 3: Create multiple queues deepening on the size of the jobs}
+\subsection{Method 3: Create multiple queues depending on the size of the jobs}
 
 The third method Fig. \ref{fig:multipleQueueDistributionOfTasks} uses a messages queue for every type of job, for out example there are three types of jobs (H, M, L), we need three queues and each "Scanner" replica will have a priority scheme that will dictate the priority it gives to each of the message queues. If the "Scanner" replica does not find messages in the queue with the highest priority, it will take messages from another queue with lower priority. The main advantage of this method, compared with the second method \ref{subsection:method2} is that messages are only withdrawn from one queue reducing the load on the queue, and replicas of components don't have to search for jobs, they can just check if there are jobs available on the queues in the order of their priority scheme. Another advantage is that replicas will not be idle or losing time searching for jobs, they will be executing jobs from queues with low priority if there are no jobs in the high priority queue.
 
