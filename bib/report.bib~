@@ -48,8 +48,9 @@
     archivePrefix = {arXiv},
     arxivId = {1507.00567},
     author = {Jamshidi, Pooyan and Sharifloo, Amir and Pahl, Claus and Metzger, Andreas and Estrada, Giovani},
-    eprint = {1507.00567},
-    title = {{Self-Learning Cloud Controllers: Fuzzy Q-Learning for Knowledge Evolution}},
-    url = {http://arxiv.org/abs/1507.00567},
-    year = {2015}
+eprint = {1507.00567},
+file = {:home/bogdan/.local/share/data/Mendeley Ltd./Mendeley Desktop/Downloaded/Jamshidi et al. - 2015 - Self-Learning Cloud Controllers Fuzzy Q-Learning for Knowledge Evolution.pdf:pdf},
+title = {{Self-Learning Cloud Controllers: Fuzzy Q-Learning for Knowledge Evolution}},
+url = {http://arxiv.org/abs/1507.00567},
+year = {2015}
 }
